@@ -3,30 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Announcement Web</title>
+    <title>Order Minecraft Food</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
     <header>
-        <h1>Announcement Web</h1>
-        <nav>
-            <button id="lightMode">Light Mode</button>
-            <button id="darkMode">Dark Mode</button>
-            <button id="startAnnouncement">Start Announcement</button>
-            <button id="stopAnnouncement">Stop Announcement</button>
-        </nav>
+        <h1>Minecraft Food Order</h1>
     </header>
     <main>
-        <aside id="announcementList">
-            <h2>Announcements</h2>
-            <ul id="announcementItems"></ul>
-        </aside>
-        <section id="videoSection">
-            <video id="localVideo" autoplay muted></video>
-            <video id="remoteVideo" autoplay></video>
-        </section>
-        <div id="announcementTime">Announcement Time: 0 seconds</div>
+        <form id="orderForm">
+            <label for="foodItem">Select Item:</label>
+            <select id="foodItem">
+                <option value="1">Minecraft Burger</option>
+                <option value="2">Minecraft Fries</option>
+                <option value="3">Minecraft Potion</option>
+            </select>
+
+            <label for="quantity">Quantity:</label>
+            <input type="number" id="quantity" min="1" value="1">
+
+            <button type="button" id="placeOrder">Place Order</button>
+        </form>
+
+        <div id="orderStatus"></div>
     </main>
-    <script src="script.js"></script>
+    <script src="order.js"></script>
 </body>
 </html>
