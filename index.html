@@ -3,11 +3,27 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Test Dark Mode</title>
+    <title>LiveStreaming App</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <button id="toggleDarkMode">Toggle Dark Mode</button>
+    <header>
+        <h1>LiveStreaming App</h1>
+        <nav>
+            <button id="lightMode">Light Mode</button>
+            <button id="darkMode">Dark Mode</button>
+            <button id="startAnnouncement">Start Announcement</button>
+            <button id="stopAnnouncement">Stop Announcement</button>
+        </nav>
+    </header>
+    <main>
+        <div id="announcementTime">Announcement Time: 0 seconds</div>
+        <video id="localVideo" autoplay muted></video>
+        <video id="remoteVideo" autoplay></video>
+        <input type="text" id="chatMessage" placeholder="Type a message">
+        <button id="sendMessage">Send</button>
+        <div id="chatBox"></div>
+    </main>
     <script src="script.js"></script>
 </body>
 </html>
