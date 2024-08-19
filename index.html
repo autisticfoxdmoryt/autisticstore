@@ -3,41 +3,40 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>AutisticText</title>
+    <title>AutisticText - Video App</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <h1>AutisticText</h1>
-    <div id="chat-container">
-        <div id="messages"></div>
-        <input id="message-input" placeholder="Type a message...">
-        <button id="send-button">Send</button>
+    <header>
+        <h1>AutisticText Video Platform</h1>
+        <nav>
+            <input type="text" id="search" placeholder="Search videos...">
+            <button id="uploadButton">Upload Video</button>
+        </nav>
+    </header>
+    <main>
+        <section id="videoList">
+            <!-- Video thumbnails will be generated here -->
+        </section>
+        <section id="videoPlayer" class="hidden">
+            <video id="player" controls></video>
+            <h2 id="videoTitle"></h2>
+            <p id="videoDescription"></p>
+            <button id="backButton">Back to Videos</button>
+        </section>
+    </main>
+
+    <div id="uploadModal" class="modal hidden">
+        <div class="modal-content">
+            <span id="closeModal">&times;</span>
+            <h2>Upload Video</h2>
+            <input type="text" id="videoTitleInput" placeholder="Title">
+            <textarea id="videoDescriptionInput" placeholder="Description"></textarea>
+            <input type="file" id="videoFileInput" accept="video/*">
+            <button id="uploadVideo">Upload</button>
+        </div>
     </div>
 
-    <script src="/socket.io/socket.io.js"></script>
-    <script>
-        const socket = io('http://localhost:3000');
-        
-        const messages = document.getElementById('messages');
-        const messageInput = document.getElementById('message-input');
-        const sendButton = document.getElementById('send-button');
-
-        socket.emit('joinServer', 'SERVER_ID');  // Replace with actual server ID
-
-        socket.on('message', (message) => {
-            const msgElement = document.createElement('div');
-            msgElement.textContent = message.sender + ": " + message.text;
-            messages.appendChild(msgElement);
-        });
-
-        sendButton.addEventListener('click', () => {
-            const message = {
-                sender: 'USERNAME',  // Replace with actual username
-                text: messageInput.value
-            };
-            socket.emit('message', 'SERVER_ID', message);  // Replace with actual server ID
-            messageInput.value = '';
-        });
-    </script>
+    <script src="script.js"></script>
 </body>
 </html>
