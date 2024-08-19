@@ -3,91 +3,41 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AutisticText - Fox-themed Chat App">
     <title>AutisticText</title>
     <link rel="stylesheet" href="styles.css">
 </head>
 <body>
-    <header>
-        <h1>AutisticText</h1>
-        <nav>
-            <a href="#chat">Chat</a>
-            <a href="#servers">Servers</a>
-            <a href="#profile">Profile</a>
-            <a href="#settings">Settings</a>
-        </nav>
-    </header>
-
-    <div class="container">
-        <!-- Chat Section -->
-        <section id="chat">
-            <h2>Chat</h2>
-            <div class="chat-window">
-                <div class="message"><strong>FoxFriend1:</strong> Welcome to the Fox Den!</div>
-                <div class="message"><strong>FoxFriend2:</strong> Let's plan our next adventure.</div>
-            </div>
-            <input type="text" placeholder="Type a message..." class="message-input">
-            <button class="send-button">Send</button>
-        </section>
-
-        <!-- Servers Section -->
-        <section id="servers">
-            <h2>Servers</h2>
-            <div class="server">
-                <strong>The Fox Den</strong> <br> A cozy place for fox enthusiasts.
-                <button class="join-button">Join</button>
-            </div>
-            <div class="server">
-                <strong>Forest Friends</strong> <br> Chat with all woodland creatures.
-                <button class="join-button">Join</button>
-            </div>
-            <button class="create-server-button">Create New Server</button>
-        </section>
-
-        <!-- Profile Section -->
-        <section id="profile">
-            <h2>Your Profile</h2>
-            <p><strong>Username:</strong> FoxyUser</p>
-            <p><strong>Status:</strong> On a wild adventure!</p>
-            <button class="edit-button">Edit Profile</button>
-        </section>
-
-        <!-- Settings Section -->
-        <section id="settings">
-            <h2>Settings</h2>
-            <div class="setting-option">
-                <label for="dark-mode">Dark Mode:</label>
-                <input type="checkbox" id="dark-mode">
-            </div>
-            <div class="setting-option">
-                <label for="notification-sound">Notification Sound:</label>
-                <select id="notification-sound">
-                    <option value="default">Default</option>
-                    <option value="fox-howl">Fox Howl</option>
-                    <option value="soft-chime">Soft Chime</option>
-                </select>
-            </div>
-            <div class="setting-option">
-                <label for="microphone">Microphone:</label>
-                <select id="microphone">
-                    <option value="default-mic">Default Microphone</option>
-                    <option value="external-mic">External Microphone</option>
-                </select>
-            </div>
-            <div class="setting-option">
-                <label for="speakers">Speakers/Headphones:</label>
-                <select id="speakers">
-                    <option value="default-speakers">Default Speakers</option>
-                    <option value="external-speakers">External Speakers</option>
-                </select>
-            </div>
-        </section>
+    <h1>AutisticText</h1>
+    <div id="chat-container">
+        <div id="messages"></div>
+        <input id="message-input" placeholder="Type a message...">
+        <button id="send-button">Send</button>
     </div>
 
-    <footer>
-        <p>&copy; 2024 AutisticText. All rights reserved.</p>
-    </footer>
+    <script src="/socket.io/socket.io.js"></script>
+    <script>
+        const socket = io('http://localhost:3000');
+        
+        const messages = document.getElementById('messages');
+        const messageInput = document.getElementById('message-input');
+        const sendButton = document.getElementById('send-button');
 
-    <script src="app.js"></script> <!-- Placeholder for future JavaScript functionality -->
+        socket.emit('joinServer', 'SERVER_ID');  // Replace with actual server ID
+
+        socket.on('message', (message) => {
+            const msgElement = document.createElement('div');
+            msgElement.textContent = message.sender + ": " + message.text;
+            messages.appendChild(msgElement);
+        });
+
+        sendButton.addEventListener('click', () => {
+            const message = {
+                sender: 'USERNAME',  // Replace with actual username
+                text: messageInput.value
+            };
+            socket.emit('message', 'SERVER_ID', message);  // Replace with actual server ID
+            messageInput.value = '';
+        });
+    </script>
 </body>
 </html>
