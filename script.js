@@ -8,11 +8,12 @@ document.addEventListener('DOMContentLoaded', () => {
     const sendMessageButton = document.getElementById('sendMessage');
     const loginButton = document.getElementById('loginButton');
     const signupButton = document.getElementById('signupButton');
+    const toggleDarkModeButton = document.getElementById('toggleDarkMode');
     
     let localStream;
     let peerConnection;
     const ws = new WebSocket('wss://your-render-url');
-    
+
     const configuration = {
         iceServers: [{ urls: 'stun:stun.l.google.com:19302' }]
     };
@@ -28,6 +29,8 @@ document.addEventListener('DOMContentLoaded', () => {
             }
         } else if (data.ice) {
             peerConnection.addIceCandidate(new RTCIceCandidate(data.ice));
+        } else if (data.message) {
+            chatBox.innerHTML += `<div>Someone: ${data.message}</div>`;
         }
     };
 
@@ -39,15 +42,15 @@ document.addEventListener('DOMContentLoaded', () => {
     startStreamButton.addEventListener('click', async () => {
         localStream = await navigator.mediaDevices.getUserMedia({ video: true, audio: true });
         localVideo.srcObject = localStream;
-        
+
         peerConnection = new RTCPeerConnection(configuration);
-        
+
         peerConnection.ontrack = (event) => {
             remoteVideo.srcObject = event.streams[0];
         };
-        
+
         localStream.getTracks().forEach(track => peerConnection.addTrack(track, localStream));
-        
+
         peerConnection.onicecandidate = (event) => {
             if (event.candidate) {
                 ws.send(JSON.stringify({ ice: event.candidate }));
@@ -78,10 +81,7 @@ document.addEventListener('DOMContentLoaded', () => {
         ws.send(JSON.stringify({ message }));
     });
 
-    ws.onmessage = (event) => {
-        const data = JSON.parse(event.data);
-        if (data.message) {
-            chatBox.innerHTML += `<div>Someone: ${data.message}</div>`;
-        }
-    };
+    toggleDarkModeButton.addEventListener('click', () => {
+        document.body.classList.toggle('dark-mode');
+    });
 });
