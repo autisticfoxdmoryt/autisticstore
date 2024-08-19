@@ -4,7 +4,8 @@ document.addEventListener('DOMContentLoaded', () => {
     const startAnnouncementButton = document.getElementById('startAnnouncement');
     const stopAnnouncementButton = document.getElementById('stopAnnouncement');
     const announcementTimeDisplay = document.getElementById('announcementTime');
-    
+    const announcementItems = document.getElementById('announcementItems');
+
     let announcementStartTime;
     let announcementInterval;
 
@@ -27,6 +28,11 @@ document.addEventListener('DOMContentLoaded', () => {
             const elapsedSeconds = Math.floor((Date.now() - announcementStartTime) / 1000);
             announcementTimeDisplay.textContent = `Announcement Time: ${elapsedSeconds} seconds`;
         }, 1000);
+
+        // Add announcement to list
+        const announcementItem = document.createElement('li');
+        announcementItem.textContent = `Announcement started at ${new Date(announcementStartTime).toLocaleTimeString()}`;
+        announcementItems.appendChild(announcementItem);
     });
 
     // Stop announcement timer
@@ -37,6 +43,10 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const elapsedSeconds = Math.floor((Date.now() - announcementStartTime) / 1000);
             announcementTimeDisplay.textContent = `Announcement Time: ${elapsedSeconds} seconds`;
+
+            // Update announcement in list
+            const announcementItem = announcementItems.lastElementChild;
+            announcementItem.textContent += ` - Stopped at ${new Date().toLocaleTimeString()}`;
         }
     });
 });
