@@ -8,6 +8,8 @@
     --video-border: #ccc;
     --announcement-background: #e0e0e0;
     --announcement-color: #000;
+    --announcement-list-background: #fafafa;
+    --announcement-list-color: #333;
 }
 
 /* Light mode specific styles */
@@ -36,6 +38,32 @@ nav button {
     cursor: pointer;
 }
 
+main {
+    display: flex;
+    padding: 10px;
+}
+
+aside {
+    width: 25%;
+    background-color: var(--announcement-list-background);
+    padding: 10px;
+    border-right: 1px solid var(--announcement-background);
+}
+
+aside h2 {
+    margin-top: 0;
+}
+
+ul {
+    list-style: none;
+    padding: 0;
+}
+
+li {
+    border-bottom: 1px solid var(--announcement-background);
+    padding: 5px 0;
+}
+
 video {
     width: 45%;
     border: 1px solid var(--video-border);
@@ -59,4 +87,6 @@ body.dark-mode {
     --video-border: #444;
     --announcement-background: #333;
     --announcement-color: #ddd;
+    --announcement-list-background: #222;
+    --announcement-list-color: #ddd;
 }
