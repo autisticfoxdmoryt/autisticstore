@@ -1,77 +1,90 @@
-document.addEventListener('DOMContentLoaded', () => {
-    const uploadButton = document.getElementById('uploadButton');
-    const uploadModal = document.getElementById('uploadModal');
-    const closeModal = document.getElementById('closeModal');
-    const videoList = document.getElementById('videoList');
-    const videoPlayer = document.getElementById('videoPlayer');
-    const player = document.getElementById('player');
-    const videoTitleElem = document.getElementById('videoTitle');
-    const videoDescriptionElem = document.getElementById('videoDescription');
-    const backButton = document.getElementById('backButton');
+const express = require('express');
+const mongoose = require('mongoose');
+const multer = require('multer');
+const bcrypt = require('bcrypt');
+const jwt = require('jsonwebtoken');
+const cors = require('cors');
+const dotenv = require('dotenv');
 
-    let videos = JSON.parse(localStorage.getItem('videos')) || [];
+dotenv.config();
 
-    function renderVideos() {
-        videoList.innerHTML = '';
-        videos.forEach((video, index) => {
-            const videoCard = document.createElement('div');
-            videoCard.classList.add('video-card');
-            videoCard.innerHTML = `
-                <img src="${video.thumbnail}" alt="${video.title}">
-                <h3>${video.title}</h3>
-                <p>${video.description}</p>
-            `;
-            videoCard.addEventListener('click', () => playVideo(index));
-            videoList.appendChild(videoCard);
-        });
+const app = express();
+app.use(express.json());
+app.use(cors());
+
+mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
+
+const userSchema = new mongoose.Schema({
+    username: String,
+    password: String,
+});
+
+const videoSchema = new mongoose.Schema({
+    title: String,
+    description: String,
+    filePath: String,
+    uploader: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
+});
+
+const User = mongoose.model('User', userSchema);
+const Video = mongoose.model('Video', videoSchema);
+
+const storage = multer.diskStorage({
+    destination: function (req, file, cb) {
+        cb(null, 'uploads/');
+    },
+    filename: function (req, file, cb) {
+        cb(null, Date.now() + '-' + file.originalname);
+    },
+});
+
+const upload = multer({ storage });
+
+app.post('/signup', async (req, res) => {
+    const { username, password } = req.body;
+    const hashedPassword = await bcrypt.hash(password, 10);
+    const user = new User({ username, password: hashedPassword });
+    await user.save();
+    res.json({ message: 'User created successfully' });
+});
+
+app.post('/login', async (req, res) => {
+    const { username, password } = req.body;
+    const user = await User.findOne({ username });
+    if (user && await bcrypt.compare(password, user.password)) {
+        const token = jwt.sign({ userId: user._id }, process.env.JWT_SECRET);
+        res.json({ token });
+    } else {
+        res.status(401).json({ message: 'Invalid credentials' });
     }
+});
 
-    function playVideo(index) {
-        const video = videos[index];
-        player.src = video.url;
-        videoTitleElem.textContent = video.title;
-        videoDescriptionElem.textContent = video.description;
-        videoList.style.display = 'none';
-        videoPlayer.style.display = 'block';
-    }
+app.post('/upload', upload.single('video'), async (req, res) => {
+    const token = req.headers.authorization.split(" ")[1];
+    const decoded = jwt.verify(token, process.env.JWT_SECRET);
 
-    uploadButton.addEventListener('click', () => {
-        uploadModal.classList.remove('hidden');
+    const video = new Video({
+        title: req.body.title,
+        description: req.body.description,
+        filePath: req.file.path,
+        uploader: decoded.userId,
     });
 
-    closeModal.addEventListener('click', () => {
-        uploadModal.classList.add('hidden');
-    });
+    await video.save();
+    res.json({ message: 'Video uploaded successfully' });
+});
 
-    document.getElementById('uploadVideo').addEventListener('click', () => {
-        const title = document.getElementById('videoTitleInput').value;
-        const description = document.getElementById('videoDescriptionInput').value;
-        const fileInput = document.getElementById('videoFileInput');
-        const file = fileInput.files[0];
+app.get('/videos', async (req, res) => {
+    const videos = await Video.find().populate('uploader', 'username');
+    res.json(videos);
+});
 
-        if (title && description && file) {
-            const reader = new FileReader();
-            reader.onload = function(event) {
-                const videoUrl = event.target.result;
-                const thumbnail = 'https://via.placeholder.com/200x150?text=Thumbnail'; // Placeholder thumbnail
+app.get('/video/:id', async (req, res) => {
+    const video = await Video.findById(req.params.id);
+    res.sendFile(video.filePath, { root: '.' });
+});
 
-                videos.push({ title, description, url: videoUrl, thumbnail });
-                localStorage.setItem('videos', JSON.stringify(videos));
-
-                renderVideos();
-                uploadModal.classList.add('hidden');
-                fileInput.value = '';
-            };
-            reader.readAsDataURL(file);
-        } else {
-            alert('Please fill all fields and select a video file.');
-        }
-    });
-
-    backButton.addEventListener('click', () => {
-        videoPlayer.style.display = 'none';
-        videoList.style.display = 'flex';
-    });
-
-    renderVideos();
+const PORT = process.env.PORT || 3001;
+app.listen(PORT, () => {
+    console.log(`Server running on port ${PORT}`);
 });
