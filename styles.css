@@ -1,92 +1,53 @@
-/* Base light mode styles */
-:root {
-    --background-color: #f9f9f9;
-    --header-background: #333;
-    --header-color: #fff;
-    --button-background: #7289da;
-    --button-color: #fff;
-    --video-border: #ccc;
-    --announcement-background: #e0e0e0;
-    --announcement-color: #000;
-    --announcement-list-background: #fafafa;
-    --announcement-list-color: #333;
-}
-
-/* Light mode specific styles */
 body {
     font-family: Arial, sans-serif;
     margin: 0;
     padding: 0;
-    background-color: var(--background-color);
-    color: #000;
+    background-color: #f9f9f9;
 }
 
 header {
-    background-color: var(--header-background);
-    color: var(--header-color);
+    background-color: #333;
+    color: #fff;
     padding: 10px;
     text-align: center;
 }
 
-nav button {
-    margin: 5px;
+main {
+    padding: 20px;
+    max-width: 600px;
+    margin: auto;
+}
+
+form {
+    display: flex;
+    flex-direction: column;
+}
+
+label, select, input {
+    margin-bottom: 10px;
+}
+
+button {
     padding: 10px;
-    background-color: var(--button-background);
-    color: var(--button-color);
+    background-color: #4caf50;
+    color: white;
     border: none;
     border-radius: 4px;
     cursor: pointer;
 }
 
-main {
-    display: flex;
-    padding: 10px;
+button:hover {
+    background-color: #45a049;
 }
 
-aside {
-    width: 25%;
-    background-color: var(--announcement-list-background);
-    padding: 10px;
-    border-right: 1px solid var(--announcement-background);
-}
-
-aside h2 {
-    margin-top: 0;
-}
-
-ul {
-    list-style: none;
+#orderList {
+    list-style-type: none;
     padding: 0;
 }
 
-li {
-    border-bottom: 1px solid var(--announcement-background);
-    padding: 5px 0;
-}
-
-video {
-    width: 45%;
-    border: 1px solid var(--video-border);
-    margin: 10px;
-}
-
-#announcementTime {
-    margin: 10px;
+#orderList li {
+    border: 1px solid #ddd;
+    margin: 5px 0;
     padding: 10px;
-    background-color: var(--announcement-background);
-    color: var(--announcement-color);
-}
-
-/* Dark mode styles */
-body.dark-mode {
-    --background-color: #1e1e1e;
-    --header-background: #1c1c1c;
-    --header-color: #e0e0e0;
-    --button-background: #4a4a4a;
-    --button-color: #ddd;
-    --video-border: #444;
-    --announcement-background: #333;
-    --announcement-color: #ddd;
-    --announcement-list-background: #222;
-    --announcement-list-color: #ddd;
+    background-color: #fff;
 }
