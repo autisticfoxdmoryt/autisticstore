@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="description" content="AutisticText - Connect, Chat, and Share">
+    <meta name="description" content="AutisticText - Fox-themed Chat App">
     <title>AutisticText</title>
     <link rel="stylesheet" href="styles.css">
 </head>
@@ -12,8 +12,9 @@
         <h1>AutisticText</h1>
         <nav>
             <a href="#chat">Chat</a>
-            <a href="#feed">Feed</a>
+            <a href="#servers">Servers</a>
             <a href="#profile">Profile</a>
+            <a href="#settings">Settings</a>
         </nav>
     </header>
 
@@ -22,42 +23,71 @@
         <section id="chat">
             <h2>Chat</h2>
             <div class="chat-window">
-                <div class="message"><strong>User1:</strong> Hey, how’s it going?</div>
-                <div class="message"><strong>User2:</strong> All good! You?</div>
-                <div class="message"><strong>User1:</strong> Doing well, just working on a project.</div>
+                <div class="message"><strong>FoxFriend1:</strong> Welcome to the Fox Den!</div>
+                <div class="message"><strong>FoxFriend2:</strong> Let's plan our next adventure.</div>
             </div>
             <input type="text" placeholder="Type a message..." class="message-input">
             <button class="send-button">Send</button>
         </section>
 
-        <!-- Feed Section -->
-        <section id="feed">
-            <h2>Feed</h2>
-            <div class="post">
-                <strong>User3:</strong> Just finished an amazing book! #Reading
-                <div class="post-actions">
-                    <span>Like</span> | <span>Comment</span>
-                </div>
+        <!-- Servers Section -->
+        <section id="servers">
+            <h2>Servers</h2>
+            <div class="server">
+                <strong>The Fox Den</strong> <br> A cozy place for fox enthusiasts.
+                <button class="join-button">Join</button>
             </div>
-            <div class="post">
-                <strong>User4:</strong> Excited to start a new job next week! #NewBeginnings
-                <div class="post-actions">
-                    <span>Like</span> | <span>Comment</span>
-                </div>
+            <div class="server">
+                <strong>Forest Friends</strong> <br> Chat with all woodland creatures.
+                <button class="join-button">Join</button>
             </div>
+            <button class="create-server-button">Create New Server</button>
         </section>
 
         <!-- Profile Section -->
         <section id="profile">
             <h2>Your Profile</h2>
-            <p><strong>Username:</strong> AutisticUser</p>
-            <p><strong>Status:</strong> Exploring the world of code!</p>
+            <p><strong>Username:</strong> FoxyUser</p>
+            <p><strong>Status:</strong> On a wild adventure!</p>
             <button class="edit-button">Edit Profile</button>
+        </section>
+
+        <!-- Settings Section -->
+        <section id="settings">
+            <h2>Settings</h2>
+            <div class="setting-option">
+                <label for="dark-mode">Dark Mode:</label>
+                <input type="checkbox" id="dark-mode">
+            </div>
+            <div class="setting-option">
+                <label for="notification-sound">Notification Sound:</label>
+                <select id="notification-sound">
+                    <option value="default">Default</option>
+                    <option value="fox-howl">Fox Howl</option>
+                    <option value="soft-chime">Soft Chime</option>
+                </select>
+            </div>
+            <div class="setting-option">
+                <label for="microphone">Microphone:</label>
+                <select id="microphone">
+                    <option value="default-mic">Default Microphone</option>
+                    <option value="external-mic">External Microphone</option>
+                </select>
+            </div>
+            <div class="setting-option">
+                <label for="speakers">Speakers/Headphones:</label>
+                <select id="speakers">
+                    <option value="default-speakers">Default Speakers</option>
+                    <option value="external-speakers">External Speakers</option>
+                </select>
+            </div>
         </section>
     </div>
 
     <footer>
         <p>&copy; 2024 AutisticText. All rights reserved.</p>
     </footer>
+
+    <script src="app.js"></script> <!-- Placeholder for future JavaScript functionality -->
 </body>
 </html>
