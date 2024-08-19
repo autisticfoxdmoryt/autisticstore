@@ -7,7 +7,6 @@ body {
     color: #ddd;
 }
 
-/* Header Styles */
 header {
     background-color: #2c2f33;
     color: #fff;
@@ -33,12 +32,12 @@ nav a {
 }
 
 nav a:hover {
-    color: #7289da;
+    color: #ff8c42; /* Fox-like color */
 }
 
 /* Container */
 .container {
-    max-width: 1000px;
+    max-width: 1200px;
     margin: auto;
     padding: 20px;
 }
@@ -68,7 +67,7 @@ nav a:hover {
 
 .send-button {
     padding: 10px 20px;
-    background-color: #7289da;
+    background-color: #ff8c42;
     color: white;
     border: none;
     border-radius: 5px;
@@ -76,29 +75,47 @@ nav a:hover {
 }
 
 .send-button:hover {
-    background-color: #5a6ebc;
+    background-color: #ff7733;
 }
 
-/* Feed Section */
-#feed {
+/* Servers Section */
+#servers {
     margin-top: 30px;
 }
 
-.post {
+.server {
     background-color: #2c2f33;
     padding: 15px;
     border-radius: 10px;
     margin-bottom: 15px;
+    font-size: 1.2rem;
 }
 
-.post-actions span {
+.join-button {
+    padding: 8px 16px;
+    background-color: #7289da;
+    color: white;
+    border: none;
+    border-radius: 5px;
     cursor: pointer;
-    color: #7289da;
-    margin-right: 10px;
 }
 
-.post-actions span:hover {
-    text-decoration: underline;
+.join-button:hover {
+    background-color: #5a6ebc;
+}
+
+.create-server-button {
+    margin-top: 20px;
+    padding: 10px 20px;
+    background-color: #7289da;
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+}
+
+.create-server-button:hover {
+    background-color: #5a6ebc;
 }
 
 /* Profile Section */
@@ -117,6 +134,30 @@ nav a:hover {
 
 .edit-button:hover {
     background-color: #5a6ebc;
+}
+
+/* Settings Section */
+#settings {
+    margin-top: 30px;
+}
+
+.setting-option {
+    margin-bottom: 15px;
+}
+
+.setting-option label {
+    font-size: 1.2rem;
+    margin-right: 10px;
+}
+
+.setting-option select,
+.setting-option input {
+    padding: 8px;
+    border-radius: 5px;
+    border: 1px solid #ddd;
+    background-color: #2c2f33;
+    color: #fff;
+    font-size: 1rem;
 }
 
 /* Footer Styles */
