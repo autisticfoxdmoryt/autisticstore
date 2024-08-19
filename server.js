@@ -1,10 +1,10 @@
 const express = require('express');
 const mongoose = require('mongoose');
-const multer = require('multer');
 const bcrypt = require('bcrypt');
 const jwt = require('jsonwebtoken');
 const cors = require('cors');
 const dotenv = require('dotenv');
+const WebSocket = require('ws');
 
 dotenv.config();
 
@@ -12,34 +12,18 @@ const app = express();
 app.use(express.json());
 app.use(cors());
 
+// Connect to MongoDB
 mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTopology: true });
 
+// User Schema
 const userSchema = new mongoose.Schema({
     username: String,
     password: String,
 });
 
-const videoSchema = new mongoose.Schema({
-    title: String,
-    description: String,
-    filePath: String,
-    uploader: { type: mongoose.Schema.Types.ObjectId, ref: 'User' },
-});
-
 const User = mongoose.model('User', userSchema);
-const Video = mongoose.model('Video', videoSchema);
 
-const storage = multer.diskStorage({
-    destination: function (req, file, cb) {
-        cb(null, 'uploads/');
-    },
-    filename: function (req, file, cb) {
-        cb(null, Date.now() + '-' + file.originalname);
-    },
-});
-
-const upload = multer({ storage });
-
+// Authentication Routes
 app.post('/signup', async (req, res) => {
     const { username, password } = req.body;
     const hashedPassword = await bcrypt.hash(password, 10);
@@ -59,32 +43,27 @@ app.post('/login', async (req, res) => {
     }
 });
 
-app.post('/upload', upload.single('video'), async (req, res) => {
-    const token = req.headers.authorization.split(" ")[1];
-    const decoded = jwt.verify(token, process.env.JWT_SECRET);
+// WebSocket Server for Real-Time Communication
+const wss = new WebSocket.Server({ noServer: true });
 
-    const video = new Video({
-        title: req.body.title,
-        description: req.body.description,
-        filePath: req.file.path,
-        uploader: decoded.userId,
+wss.on('connection', (ws) => {
+    ws.on('message', (message) => {
+        // Broadcast messages to all connected clients
+        wss.clients.forEach((client) => {
+            if (client.readyState === WebSocket.OPEN) {
+                client.send(message);
+            }
+        });
     });
-
-    await video.save();
-    res.json({ message: 'Video uploaded successfully' });
 });
 
-app.get('/videos', async (req, res) => {
-    const videos = await Video.find().populate('uploader', 'username');
-    res.json(videos);
+// Integrate WebSocket with HTTP Server
+const server = app.listen(process.env.PORT || 3001, () => {
+    console.log(`Server running on port ${process.env.PORT || 3001}`);
 });
 
-app.get('/video/:id', async (req, res) => {
-    const video = await Video.findById(req.params.id);
-    res.sendFile(video.filePath, { root: '.' });
-});
-
-const PORT = process.env.PORT || 3001;
-app.listen(PORT, () => {
-    console.log(`Server running on port ${PORT}`);
+server.on('upgrade', (request, socket, head) => {
+    wss.handleUpgrade(request, socket, head, (ws) => {
+        wss.emit('connection', ws, request);
+    });
 });
